@@ -15,7 +15,7 @@ class UserCreationForm(DjangoUserCreationForm):
             "first_name",
             "middle_name",
             "last_name",
-            "security_questions",
+            "security_question",
             "security_answer",
             "is_staff",
             "is_superuser",
@@ -42,7 +42,7 @@ class UserCreationForm(DjangoUserCreationForm):
         if not is_superuser:
             if not security_question:
                 self.add_error(
-                    "security_questions",
+                    "security_question",
                     _("Security question is required for regular users"),
                 )
             if not security_answer:
@@ -67,7 +67,7 @@ class UserChangeForm(DjangoUserChangeForm):
             "first_name",
             "middle_name",
             "last_name",
-            "security_questions",
+            "security_question",
             "security_answer",
             "is_active",
             "is_staff",
@@ -95,7 +95,7 @@ class UserChangeForm(DjangoUserChangeForm):
         if not is_superuser:
             if not security_question:
                 self.add_error(
-                    "security_questions",
+                    "security_question",
                     _("Security question is required for regular users"),
                 )
             if not security_answer:

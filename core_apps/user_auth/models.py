@@ -1,7 +1,7 @@
 import uuid
 from django.db import models
 from django.conf import settings
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -9,7 +9,7 @@ from .emails import send_account_locked_email
 from .managers import UserManager
 
 
-class User(AbstractBaseUser):
+class User(AbstractUser):
     class SecurityQuestions(models.TextChoices):
         MAIDEN_NAME = (
             "maiden_name",
@@ -66,7 +66,7 @@ class User(AbstractBaseUser):
     otp_expiry_time = models.DateTimeField(_("OTP Expiry Time"), blank=True, null=True)
 
     objects = UserManager()
-    username_field = "email"
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = [
         "first_name",
         "last_name",

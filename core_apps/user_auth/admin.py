@@ -27,13 +27,13 @@ class CustomUserAdmin(UserAdmin):
             {
                 "fields": (
                     "username",
-                    "emails",
+                    "email",
                     "password",
                 )
             },
         ),
         (
-            _("Personal Info"),
+            _("Personal Information"),
             {
                 "fields": (
                     "first_name",
@@ -58,7 +58,7 @@ class CustomUserAdmin(UserAdmin):
             _("Security"),
             {
                 "fields": (
-                    "security_questions",
+                    "security_question",
                     "security_answer",
                 )
             },

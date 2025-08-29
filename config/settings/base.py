@@ -3,8 +3,8 @@ from dotenv import load_dotenv
 from os import getenv, path
 from loguru import logger
 from datetime import timedelta  # noqa: F401
+import cloudinary
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
 APPS_DIR = BASE_DIR / "core_apps"
@@ -14,8 +14,6 @@ local_env_file = path.join(BASE_DIR, ".envs", ".env.local")
 if path.isfile(local_env_file):
     load_dotenv(local_env_file)
 
-
-# Application definition
 
 DJANGO_APPS = [
     "django.contrib.admin",
@@ -79,10 +77,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -102,8 +96,6 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.ScryptPasswordHasher",
 ]
 
-# Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -121,9 +113,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
-
 LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "UTC"
@@ -134,14 +123,10 @@ USE_TZ = True
 
 SITE_ID = 1
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "/static/"
 STATIC_ROOT = str(BASE_DIR / "staticfiles")
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "user_auth.User"
@@ -173,10 +158,20 @@ CELERY_RESULT_BACKEND_MAX_RETRIES = 10
 CELERY_TASK_SEND_SENT_EVENT = True
 CELERY_RESULT_EXTENDED = True
 CELERY_RESULT_BACKEND_ALWAYS_RETRY = True
-CELERY_TASK_TIME_LIMIT = 5*60
+CELERY_TASK_TIME_LIMIT = 5 * 60
 CELERY_TASK_SOFT_TIME_LIMIT = 60
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_WORKER_SEND_TASK_EVENTS = True
+
+CLOUDINARY_CLOUD_NAME = getenv("CLOUDINARY_CLOUD_NAME")
+CLOUDINARY_API_KEY = getenv("CLOUDINARY_API_KEY")
+CLOUDINARY_API_SECRET = getenv("CLOUDINARY_API_SECRET")
+
+cloudinary.config(
+    cloud_name=CLOUDINARY_CLOUD_NAME,
+    api_key=CLOUDINARY_API_KEY,
+    api_secret=CLOUDINARY_API_SECRET,
+)
 
 LOGGING_CONFIG = None
 

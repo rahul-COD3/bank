@@ -7,7 +7,6 @@ from django.db import IntegrityError, models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-
 User = get_user_model()
 
 
@@ -24,7 +23,7 @@ class ContentView(TimeStampedModel):
     content_type = models.ForeignKey(
         ContentType, on_delete=models.CASCADE, verbose_name=_("Content Type")
     )
-    object_id = models.UUIDField()
+    object_id = models.UUIDField(verbose_name=_("Object ID"))
     content_object = GenericForeignKey("content_type", "object_id")
     user = models.ForeignKey(
         User,
@@ -35,20 +34,26 @@ class ContentView(TimeStampedModel):
         verbose_name=_("User"),
     )
     viewer_ip = models.GenericIPAddressField(
-        null=True, blank=True, verbose_name=_("Viewer IP Address")
+        verbose_name=_("Viewer IP Address"),
+        null=True,
+        blank=True,
     )
+    last_viewed = models.DateTimeField()
 
     class Meta:
         verbose_name = _("Content View")
         verbose_name_plural = _("Content Views")
-        unique_together = ("content_type", "object_id", "user", "viewer_ip")
+        unique_together = ["content_type", "object_id", "user", "viewer_ip"]
 
-    def __str__(self):
-        return f"{self.content_type} viewed by {self.user.get_full_name() if self.user else 'Anonymous'} from IP {self.viewer_ip}"
+    def __str__(self) -> str:
+        return (
+            f"{self.content_type} viewed by "
+            f"{self.user.get_full_name if self.user else 'Anonymous'} from IP {self.viewer_ip}"
+        )
 
     @classmethod
     def record_view(
-        cls, content_object: Any, user: Optional[User], viewer_ip: Optional[str]
+        cls, content_object: Any, user: Optional[User], viewer_ip: Optional["str"]
     ) -> None:
         content_type = ContentType.objects.get_for_model(content_object)
         try:

@@ -71,7 +71,7 @@ services:
   flower:
     <<: *api
     ports:
-      - "5555:5555"
+      - "6666:5555"
     volumes:
       - flower_db:/app/flower_db
     command: /start-flower.sh

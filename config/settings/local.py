@@ -30,8 +30,8 @@ MAX_UPLOAD_SIZE = 1 * 1024 * 1024
 
 CSRF_TRUSTED_ORIGINS = ["http://localhost:8080"]
 
-LOCKOUT_DURATION = timedelta(minutes=1) # noqa
+LOCKOUT_DURATION = timedelta(minutes=1)  # noqa
 
 LOGIN_ATTEMPTS = 3
 
-OTP_EXPIRATION = timedelta(minutes=1) # noqa
+OTP_EXPIRATION = timedelta(minutes=1)  # noqa

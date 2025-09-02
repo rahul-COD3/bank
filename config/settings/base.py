@@ -139,7 +139,7 @@ DEFAULT_PHONE_NUMBER = "+250784123456"
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "core_apps.cookie_auth.CookieAuthentication",
+        "core_apps.common.cookie_auth.CookieAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
@@ -191,7 +191,7 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
     "LICENSE": {
         "name": "MIT License",
-        "url": "https://opensource.org/license/MIT",
+        "url": "https://opensource.org/license/mit",
     },
 }
 

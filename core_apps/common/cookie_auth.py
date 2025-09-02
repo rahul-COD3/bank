@@ -1,9 +1,10 @@
-from tokenize import TokenError
 from typing import Optional, Tuple
+
 from django.conf import settings
 from loguru import logger
 from rest_framework.request import Request
 from rest_framework_simplejwt.authentication import AuthUser, JWTAuthentication
+from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import Token
 
 
@@ -20,7 +21,7 @@ class CookieAuthentication(JWTAuthentication):
         if raw_token is not None:
             try:
                 validated_token = self.get_validated_token(raw_token)
-                return self.get_validated_token(validated_token), validated_token
+                return self.get_user(validated_token), validated_token
             except TokenError as e:
                 logger.error(f"Token validation error: {str(e)}")
         return None

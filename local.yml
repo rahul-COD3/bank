@@ -60,18 +60,18 @@ services:
       - "15672:15672"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
-      - rabbitmq_logs:/var/log/rabbitmq
+      - rabbitmq_log:/var/log/rabbitmq
     networks:
       - banker_local_nw
 
-  celery_worker:
+  celeryworker:
     <<: *api
     command: /start-celeryworker.sh
 
   flower:
     <<: *api
     ports:
-      - "6666:5555"
+      - "5555:5555"
     volumes:
       - flower_db:/app/flower_db
     command: /start-flower.sh
@@ -85,8 +85,8 @@ services:
       - ./.envs/.env.local
     depends_on:
       - redis
-      - rabbitmq
       - postgres
+      - rabbitmq
     networks:
       - banker_local_nw
 
@@ -114,5 +114,5 @@ volumes:
   banker_mailpit_db:
   logs_store:
   rabbitmq_data:
-  rabbitmq_logs:
+  rabbitmq_log:
   flower_db:

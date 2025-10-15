@@ -13,6 +13,8 @@ from rest_framework_simplejwt.views import TokenRefreshView
 
 from .emails import send_otp_email
 from .utils import generate_otp
+from .serializers import OTPVerifySerializer
+from drf_spectacular.utils import extend_schema
 
 User = get_user_model()
 
@@ -142,6 +144,7 @@ class CustomTokenRefreshView(TokenRefreshView):
 class OTPVerifyView(APIView):
     permission_classes = [permissions.AllowAny]
 
+    @extend_schema(request=OTPVerifySerializer, responses={200: None, 400: None, 403: None})
     def post(self, request):
         otp = request.data.get("otp")
 

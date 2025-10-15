@@ -37,7 +37,7 @@ def send_account_locked_email(self):
         "lockout_duration": int(settings.LOCKOUT_DURATION.total_seconds() // 60),
         "site_name": settings.SITE_NAME,
     }
-    html_email = render_to_string("emails/account_locked_email.html", context)
+    html_email = render_to_string("emails/account_locked.html", context)
     plain_email = strip_tags(html_email)
     email = EmailMultiAlternatives(
         subject=subject, body=plain_email, from_email=from_email, to=recipient_list

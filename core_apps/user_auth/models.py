@@ -93,7 +93,6 @@ class User(AbstractUser):
         self.last_failed_login = timezone.now()
         if self.failed_login_attempts >= settings.LOGIN_ATTEMPTS:
             self.account_status = User.AccountStatus.LOCKED
-            send_account_locked_email(self.email)
             self.save()
             send_account_locked_email(self)
         self.save()
@@ -116,7 +115,8 @@ class User(AbstractUser):
         if self.account_status == User.AccountStatus.LOCKED:
             if (
                 self.last_failed_login
-                and (timezone.now() - self.last_failed_login) > settings.LOCKOUT_TIME
+                and (timezone.now() - self.last_failed_login)
+                > settings.LOCKOUT_DURATION
             ):
                 self.unlock_account()
                 return False

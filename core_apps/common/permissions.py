@@ -7,11 +7,7 @@ class IsAccountExecutive(permissions.BasePermission):
     def has_permission(self, request: Request, view: View) -> bool:
         is_authenticated = request.user.is_authenticated
         has_role_attr = hasattr(request.user, "role")
-        return (
-            is_authenticated
-            and has_role_attr
-            and request.user.role == "account_executive"
-        )
+        return is_authenticated and has_role_attr and request.user.role == "account_executive"
 
 
 class IsTeller(permissions.BasePermission):
@@ -25,6 +21,4 @@ class IsBranchManager(permissions.BasePermission):
     def has_permission(self, request: Request, view: View) -> bool:
         is_authenticated = request.user.is_authenticated
         has_role_attr = hasattr(request.user, "role")
-        return (
-            is_authenticated and has_role_attr and request.user.role == "branch_manager"
-        )
+        return is_authenticated and has_role_attr and request.user.role == "branch_manager"

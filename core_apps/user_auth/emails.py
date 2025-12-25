@@ -17,9 +17,7 @@ def send_otp_email(email, otp):
     }
     html_email = render_to_string("emails/otp_email.html", context)
     plain_email = strip_tags(html_email)
-    email = EmailMultiAlternatives(
-        subject=subject, body=plain_email, from_email=from_email, to=recipient_list
-    )
+    email = EmailMultiAlternatives(subject=subject, body=plain_email, from_email=from_email, to=recipient_list)
     email.attach_alternative(html_email, "text/html")
     try:
         email.send()
@@ -39,9 +37,7 @@ def send_account_locked_email(self):
     }
     html_email = render_to_string("emails/account_locked.html", context)
     plain_email = strip_tags(html_email)
-    email = EmailMultiAlternatives(
-        subject=subject, body=plain_email, from_email=from_email, to=recipient_list
-    )
+    email = EmailMultiAlternatives(subject=subject, body=plain_email, from_email=from_email, to=recipient_list)
     email.attach_alternative(html_email, "text/html")
     try:
         email.send()

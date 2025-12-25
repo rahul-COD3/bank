@@ -1,27 +1,26 @@
 from typing import Any, Optional
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from djoser.views import TokenCreateView
+from drf_spectacular.utils import extend_schema
 from loguru import logger
 from rest_framework import permissions, status
-from rest_framework.response import Response
 from rest_framework.request import Request
+from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from .emails import send_otp_email
-from .utils import generate_otp
 from .serializers import OTPVerifySerializer
-from drf_spectacular.utils import extend_schema
+from .utils import generate_otp
 
 User = get_user_model()
 
 
-def set_auth_cookies(
-    response: Response, access_token: str, refresh_token: Optional[str] = None
-) -> None:
+def set_auth_cookies(response: Response, access_token: str, refresh_token: Optional[str] = None) -> None:
     access_token_lifetime = settings.SIMPLE_JWT["ACCESS_TOKEN_LIFETIME"].total_seconds()
     cookie_settings = {
         "path": settings.COOKIE_PATH,
@@ -32,9 +31,7 @@ def set_auth_cookies(
     }
     response.set_cookie("access", access_token, **cookie_settings)
     if refresh_token:
-        refresh_token_lifetime = settings.SIMPLE_JWT[
-            "REFRESH_TOKEN_LIFETIME"
-        ].total_seconds()
+        refresh_token_lifetime = settings.SIMPLE_JWT["REFRESH_TOKEN_LIFETIME"].total_seconds()
         refresh_cookie_settings = cookie_settings.copy()
         refresh_cookie_settings["max_age"] = refresh_token_lifetime
         response.set_cookie("refresh", refresh_token, **refresh_cookie_settings)
@@ -82,9 +79,7 @@ class CustomTokenCreateView(TokenCreateView):
             if user:
                 user.handle_failed_login_attempts()
                 failed_attempts = user.failed_login_attempts
-                logger.error(
-                    f"Failed login attempts: {failed_attempts}  for user: {email}"
-                )
+                logger.error(f"Failed login attempts: {failed_attempts}  for user: {email}")
                 if failed_attempts >= settings.LOGIN_ATTEMPTS:
                     return Response(
                         {
@@ -131,12 +126,8 @@ class CustomTokenRefreshView(TokenRefreshView):
                 refresh_res.data["message"] = "Access tokens refreshed successfully."
 
             else:
-                refresh_res.data["message"] = (
-                    "Access or refresh token not found in refresh response data"
-                )
-                logger.error(
-                    "Access or refresh token not found in refresh response data"
-                )
+                refresh_res.data["message"] = "Access or refresh token not found in refresh response data"
+                logger.error("Access or refresh token not found in refresh response data")
 
         return refresh_res
 
@@ -178,10 +169,7 @@ class OTPVerifyView(APIView):
         refresh_token = str(refresh)
 
         response = Response(
-            {
-                "success": "Login successful. Now add your profile information, "
-                "so that we can create an account for you"
-            },
+            {"success": "Login successful. Now add your profile information, so that we can create an account for you"},
             status=status.HTTP_200_OK,
         )
         set_auth_cookies(response, access_token, refresh_token)

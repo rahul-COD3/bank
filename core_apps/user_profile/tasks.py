@@ -2,11 +2,11 @@ import base64
 from uuid import UUID
 
 import cloudinary.uploader
-
 from celery import shared_task
 from django.apps import apps
 from django.core.files.storage import default_storage
 from loguru import logger
+
 
 @shared_task(name="upload_photos_to_cloudinary")
 def upload_photos_to_cloudinary(profile_id: UUID, photos: dict) -> None:

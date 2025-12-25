@@ -1,7 +1,8 @@
 import uuid
-from django.db import models
+
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -37,15 +38,11 @@ class User(AbstractUser):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(_("Username"), max_length=12, unique=True)
-    security_question = models.CharField(
-        _("Security Question"), max_length=30, choices=SecurityQuestions.choices
-    )
+    security_question = models.CharField(_("Security Question"), max_length=30, choices=SecurityQuestions.choices)
     security_answer = models.CharField(_("Security Answer"), max_length=30)
     email = models.EmailField(_("Email"), unique=True, db_index=True)
     first_name = models.CharField(_("First Name"), max_length=30)
-    middle_name = models.CharField(
-        _("Middle Name"), max_length=30, blank=True, null=True
-    )
+    middle_name = models.CharField(_("Middle Name"), max_length=30, blank=True, null=True)
     last_name = models.CharField(_("Last Name"), max_length=30)
     id_no = models.PositiveBigIntegerField(_("ID Number"), unique=True)
     account_status = models.CharField(
@@ -113,11 +110,7 @@ class User(AbstractUser):
     @property
     def is_locked_out(self) -> bool:
         if self.account_status == User.AccountStatus.LOCKED:
-            if (
-                self.last_failed_login
-                and (timezone.now() - self.last_failed_login)
-                > settings.LOCKOUT_DURATION
-            ):
+            if self.last_failed_login and (timezone.now() - self.last_failed_login) > settings.LOCKOUT_DURATION:
                 self.unlock_account()
                 return False
             return True

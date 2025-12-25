@@ -1,7 +1,7 @@
 import random
 import string
 from os import getenv
-from typing import Optional, Any
+from typing import Any, Optional
 
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import UserManager as DjangoUserManager
@@ -15,9 +15,7 @@ def generate_username() -> str:
     words = bank_name.split()
     prefix = "".join([word[0] for word in words]).upper()
     remaining_length = 12 - len(prefix) - 1
-    random_chars = "".join(
-        random.choices(string.ascii_uppercase + string.digits, k=remaining_length)
-    )
+    random_chars = "".join(random.choices(string.ascii_uppercase + string.digits, k=remaining_length))
     username = f"{prefix}-{random_chars}"
     return username
 
@@ -45,16 +43,12 @@ class UserManager(DjangoUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user(
-        self, email: str, password: Optional[str] = None, **extra_fields: Any
-    ):
+    def create_user(self, email: str, password: Optional[str] = None, **extra_fields: Any):
         extra_fields.setdefault("is_superuser", False)
         extra_fields.setdefault("is_staff", False)
         return self._create_user(email, password, **extra_fields)
 
-    def create_superuser(
-        self, email: str, password: Optional[str] = None, **extra_fields: Any
-    ):
+    def create_superuser(self, email: str, password: Optional[str] = None, **extra_fields: Any):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
 

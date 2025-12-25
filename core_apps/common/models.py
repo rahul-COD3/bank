@@ -1,5 +1,6 @@
 import uuid
 from typing import Any, Optional
+
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -20,9 +21,7 @@ class TimeStampedModel(models.Model):
 
 
 class ContentView(TimeStampedModel):
-    content_type = models.ForeignKey(
-        ContentType, on_delete=models.CASCADE, verbose_name=_("Content Type")
-    )
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, verbose_name=_("Content Type"))
     object_id = models.UUIDField(verbose_name=_("Object ID"))
     content_object = GenericForeignKey("content_type", "object_id")
     user = models.ForeignKey(
@@ -52,9 +51,7 @@ class ContentView(TimeStampedModel):
         )
 
     @classmethod
-    def record_view(
-        cls, content_object: Any, user: Optional[User], viewer_ip: Optional["str"]
-    ) -> None:
+    def record_view(cls, content_object: Any, user: Optional[User], viewer_ip: Optional["str"]) -> None:
         content_type = ContentType.objects.get_for_model(content_object)
         try:
             view, created = cls.objects.get_or_create(

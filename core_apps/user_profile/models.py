@@ -102,21 +102,11 @@ class Profile(TimeStampedModel):
         )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
-    title = models.CharField(
-        _("Salutation"), max_length=5, choices=Salutation.choices, default=Salutation.MR
-    )
-    gender = models.CharField(
-        _("Gender"), max_length=8, choices=Gender.choices, default=Gender.MALE
-    )
-    date_of_birth = models.DateField(
-        _("Date of Birth"), default=settings.DEFAULT_BIRTH_DATE
-    )
-    country_of_birth = CountryField(
-        _("Country of Birth"), default=settings.DEFAULT_COUNTRY
-    )
-    place_of_birth = models.CharField(
-        _("Place of Birth"), max_length=50, default="Unknown"
-    )
+    title = models.CharField(_("Salutation"), max_length=5, choices=Salutation.choices, default=Salutation.MR)
+    gender = models.CharField(_("Gender"), max_length=8, choices=Gender.choices, default=Gender.MALE)
+    date_of_birth = models.DateField(_("Date of Birth"), default=settings.DEFAULT_BIRTH_DATE)
+    country_of_birth = CountryField(_("Country of Birth"), default=settings.DEFAULT_COUNTRY)
+    place_of_birth = models.CharField(_("Place of Birth"), max_length=50, default="Unknown")
     marital_status = models.CharField(
         _("Marital Status"),
         max_length=20,
@@ -129,12 +119,8 @@ class Profile(TimeStampedModel):
         choices=IdentificationMeans.choices,
         default=IdentificationMeans.DRIVERS_LICENSE,
     )
-    id_issue_date = models.DateField(
-        _("ID or Passport Issue Date"), default=settings.DEFAULT_DATE
-    )
-    id_expiry_date = models.DateField(
-        _("ID or Passport Expiry Date"), default=settings.DEFAULT_EXPIRY_DATE
-    )
+    id_issue_date = models.DateField(_("ID or Passport Issue Date"), default=settings.DEFAULT_DATE)
+    id_expiry_date = models.DateField(_("ID or Passport Expiry Date"), default=settings.DEFAULT_EXPIRY_DATE)
     passport_number = models.CharField(
         _("Passport Number"),
         max_length=20,
@@ -142,9 +128,7 @@ class Profile(TimeStampedModel):
         null=True,
     )
     nationality = models.CharField(_("Nationality"), max_length=30, default="Unknown")
-    phone_number = PhoneNumberField(
-        _("Phone Number"), max_length=30, default=settings.DEFAULT_PHONE_NUMBER
-    )
+    phone_number = PhoneNumberField(_("Phone Number"), max_length=30, default=settings.DEFAULT_PHONE_NUMBER)
     address = models.CharField(_("Address"), max_length=100, default="Unknown")
     city = models.CharField(_("City"), max_length=50, default="Unknown")
     country = CountryField(_("Country"), default=settings.DEFAULT_COUNTRY)
@@ -208,9 +192,7 @@ class Profile(TimeStampedModel):
         blank=True,
         null=True,
     )
-    signature_photo_url = models.URLField(
-        _("Signature Photo URL"), blank=True, null=True
-    )
+    signature_photo_url = models.URLField(_("Signature Photo URL"), blank=True, null=True)
 
     def clean(self) -> None:
         super().clean()
@@ -275,15 +257,11 @@ class NextOfKin(TimeStampedModel):
             _("Female"),
         )
 
-    profile = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name="next_of_kin"
-    )
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="next_of_kin")
     title = models.CharField(_("Salutation"), max_length=5, choices=Salutation.choices)
     first_name = models.CharField(_("First Name"), max_length=50)
     last_name = models.CharField(_("Last Name"), max_length=50)
-    other_names = models.CharField(
-        _("Other Names"), max_length=50, blank=True, null=True
-    )
+    other_names = models.CharField(_("Other Names"), max_length=50, blank=True, null=True)
     date_of_birth = models.DateField(_("Date of Birth"))
     gender = models.CharField(_("Gender"), max_length=8, choices=Gender.choices)
     relationship = models.CharField(_("Relationship"), max_length=50)
@@ -297,9 +275,7 @@ class NextOfKin(TimeStampedModel):
     def clean(self) -> None:
         super().clean()
         if self.is_primary:
-            primary_kin = NextOfKin.objects.filter(
-                profile=self.profile, is_primary=True
-            ).exclude(pk=self.pk)
+            primary_kin = NextOfKin.objects.filter(profile=self.profile, is_primary=True).exclude(pk=self.pk)
             if primary_kin.exists():
                 raise ValidationError(_("There can only be one primary next of kin."))
 

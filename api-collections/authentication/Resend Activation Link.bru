@@ -1,0 +1,22 @@
+meta {
+  name: Resend Activation Link
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{local-url}}/api/v1/auth/users/resend_activation/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "email": "nova.izumi@example.com"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

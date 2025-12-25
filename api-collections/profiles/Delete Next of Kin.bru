@@ -1,0 +1,16 @@
+meta {
+  name: Delete Next of Kin
+  type: http
+  seq: 7
+}
+
+delete {
+  url: {{local-url}}/api/v1/profiles/my-profile/next-of-kin/d5e1c53d-4a2c-4d0f-b2ab-9c6a5f2f1a33/
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

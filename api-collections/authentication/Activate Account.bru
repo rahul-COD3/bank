@@ -1,0 +1,23 @@
+meta {
+  name: Activate Account
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{local-url}}/api/v1/auth/users/activation/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "uid": "Yzk5Y2U2ZjAtZjY3Yi00MjFlLTk5ZjItZjRlY2Y0MDBhN2M5",
+      "token":"luna-9c12f8c19f2c4c0a8bba7f6e91c3aa85"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

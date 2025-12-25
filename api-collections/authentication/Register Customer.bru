@@ -1,0 +1,29 @@
+meta {
+  name: Register Customer
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{local-url}}/api/v1/auth/users/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "first_name": "Nova",
+      "last_name": "Izumi",
+      "email": "nova.izumi@example.com",
+      "id_no": 808233,
+      "security_question": "birth_city",
+      "security_answer": "kyoto",
+      "password": "Skyline#2042",
+      "re_password": "Skyline#2042"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

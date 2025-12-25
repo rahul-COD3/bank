@@ -19,7 +19,7 @@ def upload_photos_to_cloudinary(profile_id: UUID, photos: dict) -> None:
                 image_content = base64.b64decode(photo_data["data"])
                 response = cloudinary.uploader.upload(image_content)
             else:
-                with open(photo_data["data"], "rb") as image_file:
+                with open(photo_data["path"], "rb") as image_file:
                     response = cloudinary.uploader.upload(image_file)
                 default_storage.delete(photo_data["path"])
             setattr(profile, field_name, response["public_id"])

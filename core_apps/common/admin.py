@@ -1,5 +1,6 @@
-from django.contrib import admin
 from typing import Any
+
+from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _

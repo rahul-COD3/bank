@@ -1,9 +1,10 @@
-from pathlib import Path
-from dotenv import load_dotenv
+from datetime import date, timedelta  # noqa: F401
 from os import getenv, path
-from loguru import logger
-from datetime import timedelta, date  # noqa: F401
+from pathlib import Path
+
 import cloudinary
+from dotenv import load_dotenv
+from loguru import logger
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
@@ -236,8 +237,7 @@ LOGURU_LOGGING = {
             "sink": BASE_DIR / "logs/debug.log",
             "level": "DEBUG",
             "filter": lambda record: record["level"].no <= logger.level("WARNING").no,
-            "format": "{time:YYYY-MM-DD HH:mm:ss.SSS} | {level: <8} | {name}:{function}:{line} - "
-            "{message}",
+            "format": "{time:YYYY-MM-DD HH:mm:ss.SSS} | {level: <8} | {name}:{function}:{line} - {message}",
             "rotation": "10MB",
             "retention": "30 days",
             "compression": "zip",
@@ -245,8 +245,7 @@ LOGURU_LOGGING = {
         {
             "sink": BASE_DIR / "logs/error.log",
             "level": "ERROR",
-            "format": "{time:YYYY-MM-DD HH:mm:ss.SSS} | {level: <8} | {name}:{function}:{line} - "
-            "{message}",
+            "format": "{time:YYYY-MM-DD HH:mm:ss.SSS} | {level: <8} | {name}:{function}:{line} - {message}",
             "rotation": "10MB",
             "retention": "30 days",
             "compression": "zip",

@@ -46,9 +46,7 @@ class UserCreationForm(DjangoUserCreationForm):
                     _("Security question is required for regular users"),
                 )
             if not security_answer:
-                self.add_error(
-                    "security_answer", "Security answer is required for regular users"
-                )
+                self.add_error("security_answer", "Security answer is required for regular users")
         return cleaned_data
 
     def save(self, commit=True):
@@ -99,7 +97,5 @@ class UserChangeForm(DjangoUserChangeForm):
                     _("Security question is required for regular users"),
                 )
             if not security_answer:
-                self.add_error(
-                    "security_answer", "Security answer is required for regular users"
-                )
+                self.add_error("security_answer", "Security answer is required for regular users")
         return cleaned_data

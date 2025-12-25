@@ -1,7 +1,6 @@
-from django.contrib import admin
-
 from cloudinary.forms import CloudinaryFileField
 from django import forms
+from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 

@@ -1,0 +1,40 @@
+default_language_version:
+  python: python3.12
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+        args: ["--maxkb=1024"]
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-toml
+      - id: check-yaml
+      - id: detect-private-key
+
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: check style and lint
+        entry: uv run ruff check
+        language: system
+        types_or: [python, pyi]
+        args: ["--fix", "--exit-non-zero-on-fix"]
+
+      - id: ruff-format
+        name: check code formatting
+        entry: uv run ruff format
+        language: system
+        types_or: [python, pyi]
+
+      - id: pip-audit-check
+        name: check for security vulnerabilities
+        entry: uv run pip-audit
+        language: system
+        pass_filenames: false
+        args:
+          - "--ignore-vuln"
+          - "CVE-2025-61783" # remove when fixed
+        files: ^(pyproject\.toml|uv\.lock)$ # Only run if pyproject.toml or uv.lock is changed

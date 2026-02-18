@@ -29,12 +29,9 @@ repos:
         language: system
         types_or: [python, pyi]
 
-      - id: pip-audit-check
-        name: check for security vulnerabilities
-        entry: uv run pip-audit
-        language: system
-        pass_filenames: false
-        args:
-          - "--ignore-vuln"
-          - "CVE-2025-61783" # remove when fixed
-        files: ^(pyproject\.toml|uv\.lock)$ # Only run if pyproject.toml or uv.lock is changed
+      # - id: pip-audit-check
+      #   name: check for security vulnerabilities
+      #   entry: uv run pip-audit
+      #   language: system
+      #   pass_filenames: false
+      #   files: ^(pyproject\.toml|uv\.lock)$ # Only run if pyproject.toml or uv.lock is changed

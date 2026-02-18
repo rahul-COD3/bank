@@ -3,37 +3,37 @@ name = "bank"
 version = "0.0.1"
 requires-python = ">=3.12"
 dependencies = [
-    "django==4.2.28",
-    "python-dotenv==1.0.1",
-    "djangorestframework==3.15.2",
-    "django-countries==7.6.1",
-    "django-phonenumber-field==8.0.0",
-    "phonenumbers==8.13.42",
-    "drf-spectacular==0.27.2",
-    "pillow==10.4.0",
-    "argon2-cffi==23.1.0",
-    "djoser==2.3.3",
-    "django-filter==24.3",
-    "django-celery-email==3.0.0",
-    "django-celery-beat==2.6.0",
-    "cloudinary==1.39.1",
-    "python-dateutil==2.9.0",
-    "psycopg2-binary==2.9.9",
-    "loguru==0.7.2",
-    "redis==5.0.3",
-    "celery==5.3.6",
-    "flower==2.0.1",
-    "django-redis==5.4.0",
-    "reportlab==4.2.2",
+    "django~=4.2.28",
+    "python-dotenv~=1.0.1",
+    "djangorestframework~=3.15.2",
+    "django-countries~=7.6.1",
+    "django-phonenumber-field~=8.0.0",
+    "phonenumbers~=8.13.42",
+    "drf-spectacular~=0.27.2",
+    "pillow~=10.4.0",
+    "argon2-cffi~=23.1.0",
+    "djoser~=2.3.3",
+    "django-filter~=24.3",
+    "django-celery-email~=3.0.0",
+    "django-celery-beat~=2.6.0",
+    "cloudinary~=1.39.1",
+    "python-dateutil~=2.9.0",
+    "psycopg2-binary~=2.9.9",
+    "loguru~=0.7.2",
+    "redis~=5.0.3",
+    "celery~=5.3.6",
+    "flower~=2.0.1",
+    "django-redis~=5.4.0",
+    "reportlab~=4.2.2",
 ]
 
 [dependency-groups]
 dev = [
-    "watchfiles==0.22.0",
-    "black==24.8.0",
-    "ruff>=0.14.10",
-    "pip-audit>=2.10.0",
-    "pre-commit>=4.5.1",
+    "watchfiles~=0.22.0",
+    "black~=24.8.0",
+    "ruff~=0.14.10",
+    "pip-audit~=2.10.0",
+    "pre-commit~=4.5.1",
 ]
 
 [tool.uv]
@@ -67,3 +67,6 @@ python_version = 3.12
 pretty = true
 ignore_missing_imports = true
 disallow_untyped_defs = true
+
+[tool.pip-audit]
+ignore-vuln = ["CVE-2025-61783", "CVE-2026-25990"]

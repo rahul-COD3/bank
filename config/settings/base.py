@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 from loguru import logger
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
-
 APPS_DIR = BASE_DIR / "core_apps"
 
 local_env_file = path.join(BASE_DIR, ".envs", ".env.local")
@@ -15,6 +14,8 @@ local_env_file = path.join(BASE_DIR, ".envs", ".env.local")
 if path.isfile(local_env_file):
     load_dotenv(local_env_file)
 
+
+# --- Apps ---
 
 DJANGO_APPS = [
     "django.contrib.admin",
@@ -90,6 +91,7 @@ DATABASES = {
     }
 }
 
+# Argon2 is preferred; remaining hashers support legacy password migration.
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.Argon2PasswordHasher",
     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
@@ -98,37 +100,24 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.ScryptPasswordHasher",
 ]
 
-
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 
+# --- Internationalisation ---
+
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_TZ = True
-
 SITE_ID = 1
-
 
 STATIC_URL = "/static/"
 STATIC_ROOT = str(BASE_DIR / "staticfiles")
-
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "user_auth.User"
@@ -137,6 +126,9 @@ DEFAULT_DATE = date(2000, 1, 1)
 DEFAULT_EXPIRY_DATE = date(2026, 1, 1)
 DEFAULT_COUNTRY = "KE"
 DEFAULT_PHONE_NUMBER = "+250784123456"
+
+
+# --- REST Framework ---
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -185,7 +177,6 @@ DJOSER = {
     },
 }
 
-
 SPECTACULAR_SETTINGS = {
     "TITLE": "NextGen Bank API",
     "DESCRIPTION": "An API built for a banking system",
@@ -196,6 +187,9 @@ SPECTACULAR_SETTINGS = {
         "url": "https://opensource.org/license/mit",
     },
 }
+
+
+# --- Celery ---
 
 if USE_TZ:
     CELERY_TIMEZONE = TIME_ZONE
@@ -214,6 +208,9 @@ CELERY_TASK_SOFT_TIME_LIMIT = 60
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_WORKER_SEND_TASK_EVENTS = True
 
+
+# --- Cloudinary ---
+
 CLOUDINARY_CLOUD_NAME = getenv("CLOUDINARY_CLOUD_NAME")
 CLOUDINARY_API_KEY = getenv("CLOUDINARY_API_KEY")
 CLOUDINARY_API_SECRET = getenv("CLOUDINARY_API_SECRET")
@@ -224,11 +221,15 @@ cloudinary.config(
     api_secret=CLOUDINARY_API_SECRET,
 )
 
+# JWT is stored in an HTTP-only cookie to prevent JavaScript access.
 COOKIE_NAME = "access"
 COOKIE_SAMESITE = "Lax"
 COOKIE_PATH = "/"
 COOKIE_HTTPONLY = True
 COOKIE_SECURE = getenv("COOKIE_SECURE", "True") == "True"
+
+
+# --- Logging ---
 
 LOGGING_CONFIG = None
 

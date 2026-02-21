@@ -21,18 +21,20 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
 
 ADMIN_URL = getenv("ADMIN_URL")
 
+# --- Email ---
+
 EMAIL_BACKEND = "djcelery_email.backends.CeleryEmailBackend"
 EMAIL_HOST = getenv("EMAIL_HOST")
 EMAIL_PORT = getenv("EMAIL_PORT")
 DEFAULT_FROM_EMAIL = getenv("DEFAULT_FROM_EMAIL")
 DOMAIN = getenv("DOMAIN")
 
-MAX_UPLOAD_SIZE = 1 * 1024 * 1024
+MAX_UPLOAD_SIZE = 1 * 1024 * 1024  # 1 MB
 
 CSRF_TRUSTED_ORIGINS = ["http://localhost:8080"]
 
+# --- Auth ---
+
 LOCKOUT_DURATION = timedelta(minutes=1)  # noqa
-
 LOGIN_ATTEMPTS = 3
-
 OTP_EXPIRATION = timedelta(minutes=1)  # noqa

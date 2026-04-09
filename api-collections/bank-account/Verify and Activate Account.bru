@@ -1,0 +1,25 @@
+meta {
+  name: Verify and Activate Account
+  type: http
+  seq: 1
+}
+
+patch {
+  url: {{local-url}}/api/v1/accounts/verify/ffea30fa-55cc-4e05-865c-27e03cb9aaf9/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "kyc_submitted": true,
+    "kyc_verified": true,
+    "verification_date": "2024-11-01T12:00:00Z",
+    "verification_notes": "All required documents have been reviewed and validated. Customer identity confirmed. Account approved for full access."
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

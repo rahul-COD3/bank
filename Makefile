@@ -25,8 +25,14 @@ collectstatic:
 superuser:
 	docker compose -f local.yml run --rm api python manage.py createsuperuser
 
+seed-superuser:
+	docker compose -f local.yml run --rm api python manage.py seed_data
+
 flush:
 	docker compose -f local.yml run --rm api python manage.py flush
+
+create-network:
+	docker network create banker_local_nw
 
 network-inspect:
 	docker network inspect banker_local_nw

@@ -3,7 +3,10 @@ from django.urls import path
 from .views import (
     AccountVerificationView,
     DepositView,
+    InitiateTransferView,
     InitiateWithdrawalView,
+    VerifyOTPView,
+    VerifySecurityQuestionView,
     VerifyUsernameAndWithdrawAPIView,
 )
 
@@ -15,6 +18,9 @@ urlpatterns = [
     ),
     path("deposit/", DepositView.as_view(), name="account_deposit"),
     path("initiate-withdrawal/", InitiateWithdrawalView.as_view(), name="initiate_withdrawal"),
+    path("transfer/initiate/", InitiateTransferView.as_view(), name="initiate_transfer"),
+    path("transfer/verify-security-question/", VerifySecurityQuestionView.as_view(), name="verify_security_question"),
+    path("transfer/verify-otp/", VerifyOTPView.as_view(), name="verify_otp"),
     path(
         "verify-username-and-withdraw/",
         VerifyUsernameAndWithdrawAPIView.as_view(),

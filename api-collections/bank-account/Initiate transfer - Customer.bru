@@ -1,0 +1,25 @@
+meta {
+  name: Initiate transfer - Customer
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{local-url}}/api/v1/accounts/transfer/initiate/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "sender_account": "2117000170294015",
+    "receiver_account": "2117000114516863",
+    "amount": 9000.00,
+    "description": "He was stuck and needed help"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

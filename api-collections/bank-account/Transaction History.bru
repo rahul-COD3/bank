@@ -1,0 +1,22 @@
+meta {
+  name: Transaction History
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{local-url}}/api/v1/accounts/transactions/?start_date=2026-04-11&end_date=2026-04-14&account_number=2117000170294015
+  body: none
+  auth: inherit
+}
+
+params:query {
+  start_date: 2026-04-11
+  end_date: 2026-04-14
+  account_number: 2117000170294015
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

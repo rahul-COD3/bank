@@ -1,0 +1,22 @@
+meta {
+  name: Transfer Step 2 - Security Answer
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{local-url}}/api/v1/accounts/transfer/verify-security-question/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "security_answer": "kyoto"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

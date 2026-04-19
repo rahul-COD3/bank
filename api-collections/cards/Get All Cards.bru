@@ -1,0 +1,15 @@
+meta {
+  name: Get All Cards
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{local-url}}/api/v1/cards/virtual-cards/
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

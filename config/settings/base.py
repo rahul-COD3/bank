@@ -209,6 +209,12 @@ CELERY_TASK_SOFT_TIME_LIMIT = 60
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_WORKER_SEND_TASK_EVENTS = True
 
+CELERY_BEAT_SCHEDULE = {
+    "apply-daily-interest": {
+        "task": "apply_daily_interest",
+    }
+}
+
 
 # --- Cloudinary ---
 

@@ -1,0 +1,22 @@
+meta {
+  name: Top Up Card
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{local-url}}/api/v1/cards/virtual-cards/8daeab9e-6546-4092-a18e-426a4e7a829e/top-up/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "amount": "10000"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

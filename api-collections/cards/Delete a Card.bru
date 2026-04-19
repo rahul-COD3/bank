@@ -1,0 +1,16 @@
+meta {
+  name: Delete a Card
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{local-url}}/api/v1/cards/virtual-cards/1bde54bb-a42e-435c-b6b4-5613e21e8eb0/
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,4 +1,7 @@
+from datetime import timedelta
+from decimal import Decimal
 from io import BytesIO
+from os import getenv
 
 from celery import shared_task
 from dateutil import parser
@@ -6,7 +9,8 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.mail import EmailMessage
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Q, Sum
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from loguru import logger
 from reportlab.lib import colors
@@ -15,6 +19,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
+from .emails import send_suspicious_activity_alert
 from .models import BankAccount, Transaction
 
 User = get_user_model()
@@ -58,20 +63,16 @@ def generate_transaction_pdf(user_id, start_date, end_date, account_number=None)
         elements.append(Spacer(1, 12))
 
         data = [["Date", "Type", "Amount", "Description", "Status", "Sender", "Receiver"]]
-        for transaction in transactions:
+        for tx in transactions:
             data.append(
                 [
-                    transaction.created_at.strftime("%Y-%m-%d %H:%M:%S"),
-                    transaction.get_transaction_type_display(),
-                    f"${transaction.amount:.2f}",
-                    (
-                        transaction.description[:30] + "..."
-                        if len(transaction.description) > 30
-                        else transaction.description
-                    ),
-                    transaction.get_status_display(),
-                    transaction.sender.full_name if transaction.sender else "N/A",
-                    transaction.receiver.full_name if transaction.receiver else "N/A",
+                    tx.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                    tx.get_transaction_type_display(),
+                    f"${tx.amount:.2f}",
+                    (tx.description[:30] + "..." if len(tx.description) > 30 else tx.description),
+                    tx.get_status_display(),
+                    tx.sender.full_name if tx.sender else "N/A",
+                    tx.receiver.full_name if tx.receiver else "N/A",
                 ]
             )
 
@@ -139,3 +140,64 @@ def apply_daily_interest():
             account.apply_daily_interest()
     logger.info(f"Done applying daily interest to {savings_account.count()} savings accounts")
     return f"Applied daily interest to {savings_account.count()} savings accounts"
+
+
+@shared_task
+def detect_suspicious_activities():
+    LARGE_TRANSACTION_THRESHOLD = Decimal(getenv("LARGE_TRANSACTION_THRESHOLD"))
+
+    FREQUENT_TRANSACTION_THRESHOLD = int(getenv("FREQUENT_TRANSACTION_THRESHOLD"))
+
+    TIME_WINDOW_HOURS = int(getenv("TIME_WINDOW_HOURS"))
+
+    TIME_WINDOW = timedelta(hours=TIME_WINDOW_HOURS)
+
+    now = timezone.now()
+
+    time_threshold = now - TIME_WINDOW
+
+    suspicious_activities = []
+
+    large_transactions = Transaction.objects.filter(
+        amount__gte=LARGE_TRANSACTION_THRESHOLD, created_at__lte=time_threshold
+    )
+
+    for tx in large_transactions:
+        suspicious_activities.append(f"Large transaction detected: {tx.amount} by user {tx.user.email}")
+
+    users = User.objects.all()
+    for user in users:
+        transaction_count = Transaction.objects.filter(user=user, created_at__gte=time_threshold).count()
+
+        if transaction_count >= FREQUENT_TRANSACTION_THRESHOLD:
+            suspicious_activities.append(f"Frequent transactions detected: {transaction_count} by user {user.email}")
+
+    accounts = BankAccount.objects.all()
+
+    for account in accounts:
+        balance_change = Transaction.objects.filter(
+            Q(sender_account=account) | Q(receiver_account=account),
+            created_at__gte=time_threshold,
+        ).aggregate(
+            total_sent=Sum("amount", filter=Q(sender_account=account)),
+            total_received=Sum("amount", filter=Q(receiver_account=account)),
+        )
+        total_change = (balance_change["total_received"] or Decimal("0")) - (
+            balance_change["total_sent"] or Decimal("0")
+        )
+
+        if abs(total_change) > LARGE_TRANSACTION_THRESHOLD:
+            suspicious_activities.append(
+                f"Large balance change detected: {total_change} by user {account.account_number}"
+            )
+
+        if suspicious_activities:
+            num_activities = send_suspicious_activity_alert(suspicious_activities)
+            if num_activities > 0:
+                return (
+                    f"Suspicious activity check completed. {num_activities} suspicious "
+                    f"activities detected and reported "
+                )
+            else:
+                return "Suspicious activity check completed. Activities detected but alert email failed to send "
+    return "Suspicious activity check completed. No suspicious activities detected"

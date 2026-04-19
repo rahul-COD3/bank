@@ -1,0 +1,22 @@
+meta {
+  name: Untitled
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{local-url}}/api/v1/cards/virtual-cards/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "bank_account_number": "2117000170294015"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
